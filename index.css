@@ -1,0 +1,28 @@
+.gowun-dodum-regular {
+    font-family: "Gowun Dodum", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+}  
+#license {
+    border: 1pt;
+    border-color: black;
+}
+#game {
+    position:relative;
+    top: 0;
+    left: 0;
+    width: 1024px;
+    height: 720px;
+    background-color: black;
+    color: white;
+}
+#text {
+    position:absolute;
+    bottom: 0px;
+    left: 0px;
+    width: 1024px;
+    height: 300px;
+    color: white;
+    background: linear-gradient(#040478, #000000);
+    font-size: 1.5em;
+}
