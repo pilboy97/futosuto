@@ -4,51 +4,37 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Gowun+Dodum&display=swap" rel="stylesheet">
-        <link href="index.css" rel="stylesheet" />
+        <link href="index.css" rel="stylesheet" /> 
     </head>
     <body>
-        <div id="game" onclick="onClick()">
+        <div id="game">
             <div id="text" class="gowun-dodum-regular"></div>
         </div>
         <div id="license">블루아카이브는 (주)넥슨코리아의 자산입니다. 본 작품은 블루아카이브의 팬게임이고, (주)넥슨코리아와 아무 관련이 없습니다. 문제 시 연락바랍니다. pilboy97@gmail.com</div>
-        <script>
-            let txt = [
-                "와오!",
-                "칸샤!",
-                "닌닌!",
-                "킷히히",
-            ]
-            let idx = 0
-            let textDiv = document.getElementById("text")
+        <script type="module">
+            import {init, getPrintLine} from "./script.js"
+            import tokenize from "./token.js"
 
-            function sleep(sec) {
-                let start = Date.now(), now = start;
-                while (now - start < sec * 1000) {
-                    now = Date.now();
+            init()
+            .then((script)=>{
+                console.log(script)
+
+                script = tokenize(script)
+                console.log(script)
+
+                let idx = 0
+                let gameDiv = document.getElementById('game')
+                let textDiv = document.getElementById("text")
+                let prevId = 0
+                let printLine = getPrintLine(textDiv)
+
+                function onClick() {
                 }
-            }
-            function printLine(str) {
-                let index = 0;
-                textDiv.textContent = ""
 
-                const intervalId = setInterval(() => {
-                    if (index < str.length) {
-                        // 텍스트를 출력할 HTML 요소를 선택합니다.
-                        textDiv.textContent += str[index];
-                        index++;
-                    } else {
-                        clearInterval(intervalId);
-                    }
-                }, 100);
-            }
+                gameDiv.addEventListener('click', onClick)
 
-            function onClick() {
-                idx = (idx + 1) % txt.length
-                nextLine = txt[idx]
-                printLine(nextLine)
-            }
-
-            onClick()
+                onClick()
+            })
         </script>
     </body>
 </html>
