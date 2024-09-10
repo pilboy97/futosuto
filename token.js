@@ -1,24 +1,4 @@
-const Kind = {
-    OPER : "OPERATOR",
-    WORD : "WORD",
-    EOF : "EOF"
-}
-Object.freeze(Kind)
-
-const Oper = {
-    LE : "<",
-    GR : ">",
-    OB : "(",
-    CB : ")",
-    OSB : "[",
-    CSB : "]",
-    OBL : "{",
-    CBL : "}",
-    COMMA : ",",
-    SCOLON : ";",
-    DIV : "/",
-}
-Object.freeze(Oper)
+import {Kind, Oper} from "./symbol.js"
 
 class Token {
     constructor() {
@@ -26,7 +6,9 @@ class Token {
         this.str = ""
     }
 }
-
+function isSpace(ch) {
+    return /\s/.test(ch)
+}
 function isOper(ch) {
     let key = Object.keys(Oper)
     let val = Object.values(Oper)
@@ -46,12 +28,14 @@ function tokenize(script) {
         let cur = script[i]
 
         if(/\s/.test(cur)) continue
-        if(cur == '#') {
-            while(cur != '\n') {
-                i++
-                cur = script[i]
+        if(cur == '/') {
+            if (i + 1 < script.length && script[i + 1] === '/') {
+                while(cur != '\n' && i < script.length) {
+                    i++
+                    cur = script[i]
+                }
+                continue
             }
-            continue
         }
 
         if(isOper(cur)) {
@@ -61,22 +45,48 @@ function tokenize(script) {
 
             res.push(token)
         }
+        else if(cur == '"') {
+            let begin = i + 1
+            let end = begin
+
+            i++
+            cur = script[i]
+            while(cur != '"' && i < script.length) {
+                i++
+                cur = script[i]
+            }
+            end = i
+
+            let token = new Token()
+            token.kind = Kind.TXT
+            token.str = script.substring(begin, end)
+
+            res.push(token)
+        }
         else {
             let begin = i
             let end = begin
 
-            while(cur != '\n') {
+            while(!isSpace(cur) && !isOper(cur) && i < script.length) {
                 i++
                 cur = script[i]
             }
+            end = i
+            if (isOper(cur)) i--
 
             let token = new Token()
-            token.kind = WORD
+            token.kind = Kind.TXT
             token.str = script.substring(begin, end)
 
             res.push(token)
         }
     }
+
+    let eof = new Token()
+    eof.kind = Kind.EOF
+    eof.str = ""
+
+    res.push(eof)
 
     return res
 }

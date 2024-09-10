@@ -5,7 +5,7 @@ async function loadScript() {
 }
 export async function init() {
     let script = await loadScript()
-    return parse(script)
+    return script
 }
 
 export function getPrintLine(textDiv) {
