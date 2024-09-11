@@ -14,12 +14,16 @@
         <script type="module">
             import {init, getPrintLine} from "./script.js"
             import tokenize from "./token.js"
+            import parse from "./parser.js"
 
             init()
             .then((script)=>{
                 console.log(script)
 
                 script = tokenize(script)
+                console.log(script)
+
+                script = parse(script)
                 console.log(script)
 
                 let idx = 0

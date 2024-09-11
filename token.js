@@ -15,7 +15,7 @@ function isOper(ch) {
 
     for(let i = 0;i < key.length;i++) {
         if (val[i] == ch) {
-            return key[i]
+            return val[i]
         }
     }
 
