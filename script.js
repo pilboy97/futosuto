@@ -8,10 +8,44 @@ export async function init() {
     return script
 }
 
-export function getPrintLine(textDiv) {
-    return function printLine(str) {
+export class Screen {
+    #prevId
+    #engine
+
+    constructor(engine, gameDiv, locDiv, nameDiv, textDiv, optDiv) {
+        this.gameDiv = gameDiv
+        this.locDiv = locDiv
+        this.nameDiv = nameDiv
+        this.textDiv = textDiv
+        this.optDiv = optDiv
+
+        this.#prevId = 0
+
+        this.locDiv.style.display = 'none'
+        this.nameDiv.style.display = 'none'
+        this.textDiv.style.display = 'none'
+        this.optDiv.style.display = 'none'
+    }
+
+    setEngine(engine) {
+        this.#engine = engine
+    }
+    printTalk(talk) {
         let index = 0;
-        textDiv.textContent = ""
+        this.textDiv.style.display = 'block'
+        this.textDiv.textContent = ""
+
+        if (talk.name) {
+            this.nameDiv.style.display = "block"
+            this.nameDiv.textContent = talk.name
+        } else {
+            this.nameDiv.style.display = "none"
+        }
+        let str = talk.line
+
+        if (this.#prevId !== 0) {
+            clearInterval(this.#prevId)
+        }
 
         const intervalId = setInterval(() => {
             if (index < str.length) {
@@ -23,7 +57,11 @@ export function getPrintLine(textDiv) {
             }
         }, 100);
 
-        return intervalId
+        this.#prevId = intervalId
     }
+}
+
+export function getPrintLine(textDiv) {
+    return
 }
 

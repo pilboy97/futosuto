@@ -8,13 +8,16 @@
     </head>
     <body>
         <div id="game">
+            <div id="loc" class="gowun-dodum-regular"></div>
+            <div id="name" class="gowun-dodum-regular"></div>
             <div id="text" class="gowun-dodum-regular"></div>
+            <div id="opt" class="gowun-dodum-regular"></div>
         </div>
-        <div id="license">블루아카이브는 (주)넥슨코리아의 자산입니다. 본 작품은 블루아카이브의 팬게임이고, (주)넥슨코리아와 아무 관련이 없습니다. 문제 시 연락바랍니다. pilboy97@gmail.com</div>
         <script type="module">
-            import {init, getPrintLine} from "./script.js"
+            import {init, getPrintLine, Screen} from "./script.js"
             import tokenize from "./token.js"
             import parse from "./parser.js"
+            import { Engine } from "./engine.js"
 
             init()
             .then((script)=>{
@@ -26,11 +29,22 @@
                 script = parse(script)
                 console.log(script)
 
+                let vars = {}
+                for(let i = 0;i < script.length;i++) {
+                    vars[script.name] = script
+                }
+
                 let idx = 0
                 let gameDiv = document.getElementById('game')
+                let locDiv = document.getElementById("loc")
+                let nameDiv = document.getElementById("name")
                 let textDiv = document.getElementById("text")
-                let prevId = 0
-                let printLine = getPrintLine(textDiv)
+                let optDiv = document.getElementById("opt")
+                
+                let screen = new Screen(gameDiv, locDiv, nameDiv, textDiv, optDiv)
+                let engine = new Engine(vars, screen)
+
+                screen.setEngine(engine)
 
                 function onClick() {
                 }
