@@ -1,39 +1,6 @@
 import {Kind, Oper} from "./symbol.js"
+import {Scene, Location, Talk, Select, Option, Goto} from "./struct.js"
 
-class Scene {
-    constructor() {
-        this.name = ""
-        this.stmt = []
-    }
-}
-class Location {
-    constructor() {
-        this.name = ""
-    }
-}
-class Talk {
-    constructor() {
-        this.speaker = ""
-        this.line = ""
-    }
-}
-class Select {
-    constructor() {
-        this.options = []
-    }
-}
-class Option {
-    constructor() {
-        this.str = ""
-        this.act = []
-    }
-}
-
-class Goto {
-    constructor() {
-        this.target = ""
-    }
-}
 
 const errUnexpectedChar = new Error("Unexpected character!")
 

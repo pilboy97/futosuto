@@ -12,7 +12,7 @@ export class Screen {
     #prevId
     #engine
 
-    constructor(engine, gameDiv, locDiv, nameDiv, textDiv, optDiv) {
+    constructor(gameDiv, locDiv, nameDiv, textDiv, optDiv) {
         this.gameDiv = gameDiv
         this.locDiv = locDiv
         this.nameDiv = nameDiv
@@ -59,9 +59,13 @@ export class Screen {
 
         this.#prevId = intervalId
     }
+    printLocation(loc) {
+        this.locDiv.style.display = "block"
+        this.locDiv.textContent = loc.name
+    }
+    waitForClick() {
+        return new Promise(resolve => {
+            this.gameDiv.addEventListener('click', resolve, { once: true });
+        })
+    }
 }
-
-export function getPrintLine(textDiv) {
-    return
-}
-

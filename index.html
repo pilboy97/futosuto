@@ -14,7 +14,7 @@
             <div id="opt" class="gowun-dodum-regular"></div>
         </div>
         <script type="module">
-            import {init, getPrintLine, Screen} from "./script.js"
+            import {init, Screen} from "./script.js"
             import tokenize from "./token.js"
             import parse from "./parser.js"
             import { Engine } from "./engine.js"
@@ -26,13 +26,8 @@
                 script = tokenize(script)
                 console.log(script)
 
-                script = parse(script)
-                console.log(script)
-
-                let vars = {}
-                for(let i = 0;i < script.length;i++) {
-                    vars[script.name] = script
-                }
+                let vars = parse(script)
+                console.log(vars)
 
                 let idx = 0
                 let gameDiv = document.getElementById('game')
@@ -45,13 +40,8 @@
                 let engine = new Engine(vars, screen)
 
                 screen.setEngine(engine)
-
-                function onClick() {
-                }
-
-                gameDiv.addEventListener('click', onClick)
-
-                onClick()
+                
+                engine.run()
             })
         </script>
     </body>
