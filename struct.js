@@ -9,9 +9,18 @@ export class Location {
         this.name = ""
     }
 }
+export class Speaker {
+    constructor(str) {
+        let tokens = str.split(".")
+        
+        this.name = tokens[0]
+        if(tokens.length >= 2)
+            this.options = tokens.slice(1)
+    }
+}
 export class Talk {
     constructor() {
-        this.speaker = ""
+        this.speaker = null
         this.line = ""
     }
 }

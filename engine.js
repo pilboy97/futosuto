@@ -3,6 +3,8 @@ import {Scene, Location, Talk, Select, Goto} from "./struct.js"
 const ErrUnknownVar = new Error("cannot find variable")
 const ErrWrongTypeScene = new Error("variable is not scene type")
 const ErrWrongTypeStmt = new Error("wrong type of statement")
+const ErrWrongSelect = new Error("select statement error")
+const Abort = new Error("This is not Error. This is just to abort JS")
 
 export class Engine {
     constructor(vars, screen) {
@@ -26,7 +28,7 @@ export class Engine {
         if (!(talk instanceof Talk))
             throw ErrWrongTypeStmt
 
-        console.log(`${talk.speaker} : ${talk.line}`)
+        this.screen.printTalk(talk)
         await this.waitForClick()
     }
     async runSelect(sel) {
@@ -35,21 +37,28 @@ export class Engine {
 
         this.sel = null
 
-        console.log("[")
+        this.sel = await this.screen.printSelect(sel)
 
-        for(let i = 0;i < sel.options.length;i++) {
-            console.log(sel.options[i].str)
+        console.log(this.sel)
+        if (!(this.sel >= 0 && this.sel < sel.options.length)) {
+            throw ErrWrongSelect
         }
 
-        console.log("]")
+        let res = sel.options[this.sel]
+        for(let i = 0;i < res.act.length;i++) {
+            await this.runStmt(res.act[i])
+        }
     }
     async runGoto(cmd) {
         if(!(cmd instanceof Goto)) 
             throw ErrWrongTypeStmt
 
         await this.runScene(cmd.target)
+        throw Abort
     }
     async runStmt(stmt) {
+        console.log(stmt)
+
         if(stmt instanceof Location) {
             await this.runLocation(stmt)
         } else if(stmt instanceof Talk) {

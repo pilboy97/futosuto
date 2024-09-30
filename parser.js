@@ -1,5 +1,5 @@
 import {Kind, Oper} from "./symbol.js"
-import {Scene, Location, Talk, Select, Option, Goto} from "./struct.js"
+import {Scene, Location, Speaker,Talk, Select, Option, Goto} from "./struct.js"
 
 
 const errUnexpectedChar = new Error("Unexpected character!")
@@ -226,7 +226,9 @@ function parseTalk() {
     let res = new Talk()
 
     if(is(Kind.AT)) {
-        res.speaker = getTXT()
+        let speaker = getTXT()
+
+        res.speaker = new Speaker(speaker)
     }
     res.line = getTXT()
 
