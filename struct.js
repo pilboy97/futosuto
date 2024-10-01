@@ -40,3 +40,9 @@ export class Goto {
         this.target = ""
     }
 }
+
+export class Title {
+    constructor() {
+        this.title = ""
+    }
+}

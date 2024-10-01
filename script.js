@@ -4,7 +4,7 @@ async function loadScript() {
     let filename = window.location.hash.substring(1)
     let filepath = `${filename}.molu`
 
-    console.log(filepath)
+    //console.log(filepath)
 
     return (await (await fetch(`script/${filepath}`)).text())
 }
@@ -17,9 +17,10 @@ export class Screen {
     #prevId
     #engine
 
-    constructor(gameDiv, locDiv, nameDiv, textDiv, optDiv) {
+    constructor(gameDiv, titleDiv,locDiv, nameDiv, textDiv, optDiv) {
         this.gameDiv = gameDiv
         this.locDiv = locDiv
+        this.titleDiv = titleDiv
         this.nameDiv = nameDiv
         this.textDiv = textDiv
         this.optDiv = optDiv
@@ -28,6 +29,7 @@ export class Screen {
         this.#prevId = 0
 
         this.locDiv.style.display = 'none'
+        this.titleDiv.style.display = 'none'
         this.nameDiv.style.display = 'none'
         this.textDiv.style.display = 'none'
         this.optDiv.style.display = 'none'
@@ -38,6 +40,7 @@ export class Screen {
     }
     clear() {
         this.locDiv.style.display = 'none'
+        this.titleDiv.style.display = 'none'
         this.nameDiv.style.display = 'none'
         this.textDiv.style.display = 'none'
         this.optDiv.style.display = 'none'
@@ -78,10 +81,16 @@ export class Screen {
         this.locDiv.style.display = "block"
         this.locDiv.textContent = loc.name
     }
+    printTitle(title) {
+        this.clear()
+
+        this.titleDiv.style.display = "block"
+        this.titleDiv.textContent = title.title
+    }
     async printSelect(sel) {
         this.clear()
 
-        this.optDiv.style.display = "block"
+        this.optDiv.style.display = "flex"
 
         let listeners = []
 

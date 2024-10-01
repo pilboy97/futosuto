@@ -16,6 +16,18 @@
     background-color: black;
     color: white;
 }
+#title {
+    position:relative;
+    top: 0;
+    left: 0;
+    width: 1024px;
+    height: 720px;
+    background-color: black;
+    color: white;
+    line-height: 720px;
+    text-align: center;
+    font-size: 3em;
+}
 #text {
     position:absolute;
     bottom: 0px;
@@ -32,13 +44,44 @@
     bottom: 300px;
     width: 1024px;
     height: 50px;
-    background-color: green;
+    line-height: 50px;
+    font-size: 2em;
+    background-color: #040478;
 }
 #loc {
     position:absolute;
     left: 0px;
-    top: 0px;
-    width: 1024px;
+    top: 128px;
+    width: 256px;
     height: 50px;
+    font-size: 1.5em;
+    line-height: 50px;
+    text-align: center;
     background-color: blue;
+}
+#opt {
+    position:absolute;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    left: 262px;
+    top: 0px;
+    width: 500px;
+    height: 720px;
+    background-color: black;
+}
+.option {
+    background-color: white;
+    color: black;
+    width: 100%;
+    text-align: center;
+    font-size: 1.5em;
+    margin: 0.25em 0;
+}
+#scripts {
+    display: flex;
+}
+#scripts a {
+    margin: 10px;
 }

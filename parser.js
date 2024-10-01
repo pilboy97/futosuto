@@ -1,5 +1,5 @@
 import {Kind, Oper} from "./symbol.js"
-import {Scene, Location, Speaker,Talk, Select, Option, Goto} from "./struct.js"
+import {Scene, Location, Speaker,Talk, Title, Select, Option, Goto} from "./struct.js"
 
 
 const errUnexpectedChar = new Error("Unexpected character!")
@@ -120,6 +120,9 @@ function isOptionEnd() {
     header += 3
     return true
 }
+function isTitle() {
+    return is(Kind.NOT)
+}
 function isCommand() {
     return is(Kind.SHARP)
 }
@@ -185,6 +188,11 @@ function parseStmt() {
 
         return parseSelect()
     }
+    else if(isTitle()) {
+        header -= 1
+
+        return parseTitle()
+    }
     else if(isScriptOpen()) {
         header -= 2
 
@@ -231,6 +239,14 @@ function parseTalk() {
         res.speaker = new Speaker(speaker)
     }
     res.line = getTXT()
+
+    return res
+}
+function parseTitle() {
+    let res = new Title()
+
+    must(isTitle())
+    res.title = getTXT()
 
     return res
 }

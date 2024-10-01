@@ -10,6 +10,7 @@ export const Oper = {
     CBL : "}",
     COMMA : ",",
     SCOLON : ";",
+    NOT : "!",
     DIV : "/",
     AT : "@",
     SHARP : "#"

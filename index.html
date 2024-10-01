@@ -12,6 +12,7 @@
             <div id="name" class="gowun-dodum-regular"></div>
             <div id="text" class="gowun-dodum-regular"></div>
             <div id="opt" class="gowun-dodum-regular"></div>
+            <div id="title" class="gowun-dodum-regular"></div>
         </div>
         <div id='scripts'>
         </div>
@@ -39,22 +40,23 @@
 
             init()
             .then((script)=>{
-                console.log(script)
+                //console.log(script)
 
                 script = tokenize(script)
-                console.log(script)
+                //console.log(script)
 
                 let vars = parse(script)
-                console.log(vars)
+                //console.log(vars)
 
                 let idx = 0
                 let gameDiv = document.getElementById('game')
+                let titleDiv = document.getElementById('title')
                 let locDiv = document.getElementById("loc")
                 let nameDiv = document.getElementById("name")
                 let textDiv = document.getElementById("text")
                 let optDiv = document.getElementById("opt")
                 
-                let screen = new Screen(gameDiv, locDiv, nameDiv, textDiv, optDiv)
+                let screen = new Screen(gameDiv, titleDiv,locDiv, nameDiv, textDiv, optDiv)
                 let engine = new Engine(vars, screen)
 
                 screen.setEngine(engine)

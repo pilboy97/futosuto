@@ -1,4 +1,4 @@
-import {Scene, Location, Talk, Select, Goto} from "./struct.js"
+import {Scene, Location, Talk, Select, Goto, Title} from "./struct.js"
 
 const ErrUnknownVar = new Error("cannot find variable")
 const ErrWrongTypeScene = new Error("variable is not scene type")
@@ -39,7 +39,7 @@ export class Engine {
 
         this.sel = await this.screen.printSelect(sel)
 
-        console.log(this.sel)
+        //console.log(this.sel)
         if (!(this.sel >= 0 && this.sel < sel.options.length)) {
             throw ErrWrongSelect
         }
@@ -56,8 +56,12 @@ export class Engine {
         await this.runScene(cmd.target)
         throw Abort
     }
+    async runTitle(title) {
+        this.screen.printTitle(title)
+        await this.waitForClick()
+    }
     async runStmt(stmt) {
-        console.log(stmt)
+        //console.log(stmt)
 
         if(stmt instanceof Location) {
             await this.runLocation(stmt)
@@ -65,6 +69,8 @@ export class Engine {
             await this.runTalk(stmt)
         } else if(stmt instanceof Select) {
             await this.runSelect(stmt)
+        } else if(stmt instanceof Title) {
+            await this.runTitle(stmt)
         } else if(stmt instanceof Goto) {
             await this.runGoto(stmt)
         } else {
@@ -81,16 +87,23 @@ export class Engine {
             throw ErrWrongTypeScene
         }
 
-        console.log(`run ${scene.name}`)
+        //console.log(`run ${scene.name}`)
 
         for(let i = 0;i < scene.stmt.length;i++) {
             await this.runStmt(scene.stmt[i])
         }
 
-        console.log(`end ${scene.name}`)
+        //console.log(`end ${scene.name}`)
     }
     async run() {
-        await this.runScene("INIT")
+        try {
+            await this.runScene("INIT")
+        } catch(e) {
+            if (e !== Abort)
+                throw e
+        }
+
+        this.screen.clear()
     }
 
     async waitForClick() {
