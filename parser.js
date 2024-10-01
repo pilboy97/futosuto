@@ -70,30 +70,6 @@ function isLocationOpen() {
 function isLocationClose() {
     return is(Kind.CB)
 }
-function isScriptOpen() {
-    if (header + 1 >= code.length)
-        return false
-
-    if (code[header].kind !== Kind.OBL)
-        return false
-    if (code[header + 1].kind !== Kind.OBL)
-        return false
-
-    header += 2
-    return true
-}
-function isScriptClose() {
-    if (header + 1 >= code.length)
-        return false
-
-    if (code[header].kind !== Kind.CBL)
-        return false
-    if (code[header + 1].kind !== Kind.CBL)
-        return false
-
-    header += 2
-    return true
-}
 function isSelectBegin() {
     return is(Kind.OSB)
 }
@@ -192,11 +168,6 @@ function parseStmt() {
         header -= 1
 
         return parseTitle()
-    }
-    else if(isScriptOpen()) {
-        header -= 2
-
-        return parseScript()
     }
     else if(isCommand()) {
         header -= 1
