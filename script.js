@@ -1,7 +1,12 @@
 import parse from "./parser.js"
 
 async function loadScript() {
-    return (await (await fetch("script.molu")).text())
+    let filename = window.location.hash.substring(1)
+    let filepath = `${filename}.molu`
+
+    console.log(filepath)
+
+    return (await (await fetch(`script/${filepath}`)).text())
 }
 export async function init() {
     let script = await loadScript()

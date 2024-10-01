@@ -13,11 +13,29 @@
             <div id="text" class="gowun-dodum-regular"></div>
             <div id="opt" class="gowun-dodum-regular"></div>
         </div>
+        <div id='scripts'>
+        </div>
         <script type="module">
+            import scriptList from './script/list.js'
             import {init, Screen} from "./script.js"
             import tokenize from "./token.js"
             import parse from "./parser.js"
             import { Engine } from "./engine.js"
+
+            let scripts = document.getElementById('scripts')
+            for(let i = 0;i < scriptList.length;i++) {
+                const link = document.createElement('a')
+                link.innerText = scriptList[i]
+                link.href = `#${scriptList[i]}`
+
+                scripts.appendChild(link)
+            }
+            
+            if (!window.location.hash) {
+                window.location.hash = scriptList[0]
+            }
+
+            window.onhashchange = () => { window.location.reload() }
 
             init()
             .then((script)=>{
