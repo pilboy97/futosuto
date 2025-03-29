@@ -1,0 +1,1 @@
+npx http-server ./public -p 8080 -c-1 -mime-types '{"html": "text/html", "css":"text/css", "js":"text/javascript", "molu":"text/plain"}' &
