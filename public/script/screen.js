@@ -59,29 +59,28 @@ export class Screen {
             this.#engine.runStmt(act)
           }
         })
-      })
+      }),
     )
   }
   async printText(text) {
     for (let i = 0; i < text.length; i++) {
-      this.#ctx.beginPath()
       this.#ctx.fillStyle = "white"
       this.#ctx.font = "20px Arial"
-      this.#ctx.fillText(text[i], 20 * i, 40)
-      this.#ctx.closePath()
-
+      this.#ctx.fillText(text.substring(0, i + 1), 10, 40)
       await wait(40)
     }
   }
+
   async waitForClick() {
-    let fn = (resolve) => {
-      this.#canvas.addEventListener("click", () => {
+    return new Promise((resolve) => {
+      const handler = () => {
+        this.#canvas.removeEventListener("click", handler)
         resolve()
-        this.#canvas.removeEventListener("click", fn)
-      })
-    }
-    return new Promise(fn)
+      }
+      this.#canvas.addEventListener("click", handler)
+    })
   }
+
   async printButton(text, x, y, w, h, fn) {
     this.#ctx.beginPath()
     this.#ctx.fillStyle = "gray"
@@ -99,12 +98,11 @@ export class Screen {
 
     return new Promise((resolve) => {
       let callback = (e) => {
-        if (
-          e.clientX >= x &&
-          e.clientX <= x + w &&
-          e.clientY >= y &&
-          e.clientY <= y + h
-        ) {
+        const rect = this.#canvas.getBoundingClientRect()
+        const cx = e.clientX - rect.left
+        const cy = e.clientY - rect.top
+
+        if (cx >= x && cx <= x + w && cy >= y && cy <= y + h) {
           fn()
           this.#canvas.removeEventListener("click", callback)
           resolve()

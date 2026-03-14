@@ -7,7 +7,7 @@ export class Engine {
     this.screen = new Screen(this)
     this.scenes = initScript()
     this.header = this.scenes.then((s) =>
-      s.map((s) => ({ name: s.name, header: 0 }))
+      s.map((s) => ({ name: s.name, header: 0 })),
     )
     this.stack = []
   }
@@ -28,7 +28,7 @@ export class Engine {
   }
 
   async runStmt(stmt) {
-    this.screen.clear()
+    await this.screen.clear() // fix: await 누락
     if (stmt instanceof Title) {
       await this.screen.printTitle(stmt)
     } else if (stmt instanceof Location) {
@@ -60,7 +60,10 @@ export class Engine {
     for (let i = header; i < scene.stmt.length; i++) {
       let stmt = scene.stmt[i]
       await this.runStmt(stmt)
-      await this.screen.waitForClick()
+      // fix: Select는 버튼 클릭으로 이미 진행되므로 waitForClick 스킵
+      if (!(stmt instanceof Select)) {
+        await this.screen.waitForClick()
+      }
     }
 
     this.stack.pop()
@@ -69,9 +72,21 @@ export class Engine {
       await this.printEnd()
     }
   }
+
   async printEnd() {
     await this.screen.clear()
     await this.screen.printText("Thank you for playing!")
+    // fix: 클릭하면 재시작
+    await this.screen.waitForClick()
+    await this.restart()
+  }
+
+  async restart() {
+    this.scenes = initScript()
+    this.header = this.scenes.then((s) =>
+      s.map((s) => ({ name: s.name, header: 0 })),
+    )
+    this.stack = []
     await this.begin()
   }
 }
