@@ -1,10 +1,7 @@
 # FUTOSUTO
 
-A lightweight visual novel engine that runs in the browser.  
-Scenarios are written in a custom scripting language called `.molu`.
-
-ブラウザで動作する軽量ビジュアルノベルエンジンです。  
-独自スクリプト言語 `.molu` でシナリオを記述します。
+A browser-based visual novel engine powered by a custom scripting language called `.molu`.  
+独自スクリプト言語 `.molu` で動作する、ブラウザベースのビジュアルノベルエンジンです。
 
 ---
 
@@ -12,7 +9,7 @@ Scenarios are written in a custom scripting language called `.molu`.
 
 ```
 <<INIT>>
-(玄関 / Entryway)
+(Entryway / 玄関)
 @A.tired "I'm home."
 @B.smile "Welcome back. Dinner first, or bath first?"
 [
@@ -24,6 +21,98 @@ Scenarios are written in a custom scripting language called `.molu`.
     </>
 ]
 <</>>
+
+<<dinner>>
+(Kitchen / 台所)
+@A "Thanks for the meal."
+@A.smile "Delicious!"
+@B.smile "Hehehe~"
+<</>>
+
+<<bath>>
+(Bathroom / お風呂)
+@A.relaxed "Ahhh, so refreshing."
+@B "I left some clean clothes for you."
+@A "Thanks."
+<</>>
+```
+
+---
+
+## Getting Started / 始め方
+
+A local web server is required because the engine uses ES Modules and `fetch`.  
+ES Moduleと`fetch`を使用しているため、ローカルWebサーバーが必要です。
+
+```bash
+# Python / Pythonの場合
+python -m http.server 8080
+```
+
+Open `http://localhost:8080` in your browser.  
+ブラウザで `http://localhost:8080` を開いてください。
+
+To use your own scenario, edit `script.molu` in the project root.  
+シナリオを変更するには、プロジェクトルートの `script.molu` を編集してください。
+
+---
+
+## .molu Script Syntax / スクリプト文法
+
+### Scene / シーン
+
+The basic unit of a scenario. Execution begins from the `INIT` scene.  
+シナリオの基本単位です。`INIT` シーンから実行が始まります。
+
+```
+<<SceneName>>
+    ...content...
+<</>>
+```
+
+### Location / 場所
+
+Displays the current location on screen.  
+現在地をスクリーンに表示します。
+
+```
+(LocationName)
+```
+
+### Dialogue / 台詞
+
+```
+@CharacterName "Dialogue text"
+@CharacterName.emotion "Dialogue with an emotion tag"
+```
+
+The emotion tag (e.g. `.smile`, `.tired`) can be used to drive sprite expressions.  
+感情タグ（例：`.smile`、`.tired`）はキャラクタースプライトの表情制御に使えます。
+
+### Choices / 選択肢
+
+```
+[
+    <"Option A">
+        ...actions...
+    </>
+    <"Option B">
+        ...actions...
+    </>
+]
+```
+
+### Commands / コマンド
+
+| Command / コマンド | Description / 説明 |
+|---|---|
+| `!goto SceneName` | Jump to a scene / 指定シーンへジャンプ |
+| `!title Text` | Display title text / タイトルテキストを表示 |
+
+### Comments / コメント
+
+```
+// This line is ignored. / この行は無視されます。
 ```
 
 ---
@@ -35,7 +124,7 @@ Scenarios are written in a custom scripting language called `.molu`.
 ├── index.html          # Entry point / エントリーポイント
 ├── index.js            # Engine initialization / エンジン初期化
 ├── index.css           # Styles / スタイル
-├── script.molu         # Game scenario / ゲームシナリオ
+├── script.molu         # Scenario file / シナリオファイル
 └── script/
     ├── engine.js       # Game loop & scene runner / ゲームループ・シーン実行
     ├── screen.js       # Canvas rendering / Canvas描画
@@ -47,73 +136,15 @@ Scenarios are written in a custom scripting language called `.molu`.
     └── common.js       # Utility functions / ユーティリティ
 ```
 
----
-
-## Getting Started / 始め方
-
-A local web server is required due to ES Modules and `fetch` usage (`file://` protocol is not supported).  
-ES Moduleと`fetch`を使用しているため、ローカルWebサーバーが必要です（`file://`プロトコル不可）。
-
-```bash
-# Using Python's built-in server / Pythonの内蔵サーバーを使う場合
-python -m http.server 8080
-```
-
-Open `http://localhost:8080` in your browser to start the game.  
-ブラウザで `http://localhost:8080` を開くとゲームが起動します。
-
----
-
-## .molu Script Syntax / スクリプト文法
-
-### Scene / シーン
-
-The basic unit of a scenario. The `INIT` scene is the entry point.  
-シナリオの基本単位です。`INIT` シーンが開始地点になります。
+### Pipeline / 処理フロー
 
 ```
-<<SceneName>>
-    ...content...
-<</>>
-```
-
-### Location / 場所
-
-```
-(LocationName)
-```
-
-### Dialogue / 台詞
-
-```
-@CharacterName "Dialogue text"
-@CharacterName.emotion "Dialogue with emotion tag"
-```
-
-### Choices / 選択肢
-
-```
-[
-    <"Option text">
-        ...actions...
-    </>
-    <"Another option">
-        ...actions...
-    </>
-]
-```
-
-### Commands / コマンド
-
-| Command / コマンド | Description / 説明 |
-|---|---|
-| `!goto SceneName` | Jump to the specified scene / 指定シーンへ移動 |
-| `!title Text` | Display a title on screen / タイトルテキストを表示 |
-
-### Comments / コメント
-
-```
-// This line is ignored. / この行は無視されます。
+script.molu
+  → Lexer / 字句解析 (token.js)
+    → Parser / 構文解析 (parser.js)
+      → AST
+        → Engine / 実行 (engine.js)
+          → Screen / 描画 (screen.js)
 ```
 
 ---
